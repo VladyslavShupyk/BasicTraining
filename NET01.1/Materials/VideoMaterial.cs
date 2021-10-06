@@ -10,25 +10,35 @@ namespace NET01._1.Materials
 {
     class VideoMaterial : TrainingMaterial, IVersionable
     {
-        public string videoUri { get; set; }
-        public string pictureUri { get; set; }
-        VideoFormat format { get; set; }
         byte[] version;
-
+        public string VideoUri { get; set; }
+        public string PictureUri { get; set; }
+        VideoFormat Format { get; set; }
         public VideoMaterial(string videoUri, string pictureUri, VideoFormat format)
         {
-            this.videoUri = videoUri;
-            this.pictureUri = pictureUri;
-            this.format = format;
-            this.version = new byte[8];
+            if (videoUri == String.Empty)
+                throw new Exception("Video uri cannot be empty");
+            else if (videoUri == null)
+                throw new Exception("Video uri cannot be empty");
+            else
+            {
+                VideoUri = videoUri;
+                PictureUri = pictureUri;
+                Format = format;
+                version = new byte[8];
+            }
+        }
+        public VideoMaterial(string videoUri, string pictureUri, VideoFormat format, string description)
+        {
+            VideoUri = videoUri;
+            PictureUri = pictureUri;
+            Format = format;
+            version = new byte[8];
+            Description = description;
         }
         public VideoFormat GetVideoFormat()
         {
-            return this.format;
-        }
-        public override string ToString()
-        {
-            return videoUri;
+            return Format;
         }
         public byte[] GetVersion()
         {
@@ -38,7 +48,12 @@ namespace NET01._1.Materials
         public void SetVersion(byte[] version)
         {
             if (version.Length == 8)
-                this.version = version;
+            {
+                for (int i = 0; i < version.Length; i++)
+                    this.version[i] = version[i];
+            }
+            else
+                throw new Exception("Version not contain 8 byte array.");
         }
     }
 }

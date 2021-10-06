@@ -9,17 +9,26 @@ namespace NET01._1.Materials
     class TextMaterial : TrainingMaterial
     {
         const int maxLengthText = 10000;
-        string text { get; set; }
+        string text;
+        public string Text
+        {
+            get { return text; }
+            set
+            {
+                if (value.Length <= maxLengthText)
+                    text = value;
+                else
+                    throw new Exception("The text can contain up to 10,000 characters.");
+            }
+        }
         public TextMaterial(string text)
         {
-            if (text.Length <= maxLengthText)
-                this.text = text;
-            else
-                this.text = text.Substring(0, maxLengthText);
+            Text = text;
         }
-        public override string ToString()
+        public TextMaterial(string text, string description)
         {
-            return text;
+            Description = description;
+            Text = text;
         }
     }
 }

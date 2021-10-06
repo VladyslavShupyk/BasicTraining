@@ -11,71 +11,74 @@ namespace NET01._1
     {
         static void Main(string[] args)
         {
-            TrainingMaterial material = new VideoMaterial("http://video.com", "http://picture.com", Types.VideoFormat.Mp4);
-            TrainingMaterial material2 = new TextMaterial("Hello world!");
-            TrainingLesson lesson = new TrainingLesson(material);
-            TrainingLesson lesson2 = new TrainingLesson(material2);
-            TypeOfLesson type = lesson.GetTypeOfLesson();
-            TypeOfLesson type2 = lesson2.GetTypeOfLesson();
-            material.SetNewGuidMaterial();
-            material2.SetNewGuidMaterial();
-            Console.WriteLine("Type first lesson - " + type);
-            Console.WriteLine("Description : " + lesson.ToString());
-            lesson.SetNewGuidLesson();
-            Console.WriteLine(lesson.guid);
-            Console.WriteLine("Version of lesson : ");
-            IVersionable lesson3 = (TrainingLesson)lesson;
-            lesson3.SetVersion(new byte[] { 2, 2, 2, 2, 2, 2, 2, 2 });
-            byte[] lesson3Version = lesson3.GetVersion();
-            for (int i = 0; i < lesson3Version.Length; i++)
-                Console.Write(lesson3Version[i]);
+            //Text lesson test
+            TrainingLesson textLesson = new TrainingLesson(new TextMaterial("Lorem ipsum...","First text lesson"));
+            textLesson.Description = "First lesson";
+            textLesson.SetNewGuidLesson();
+            textLesson.material.SetNewGuidMaterial();
+            byte[] textLessonVersion = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1};
+            textLesson.SetVersion(textLessonVersion);
+            ShowInfoAboutLesson(textLesson);
+
+            //Clone text lesson test
+            TrainingLesson cloneTextLesson = (TrainingLesson)textLesson.Clone();
+            Console.WriteLine("Testing the Equality of Lessons : "); 
+            if (textLesson.Equals(cloneTextLesson))
+                Console.WriteLine("Lessons are the same");
+            else
+                Console.WriteLine("Lessons are not the same");
             Console.WriteLine();
+            cloneTextLesson.Description = "Clone first lesson";
+            cloneTextLesson.material.Description = "Clone first text lesson";
+            cloneTextLesson.SetNewGuidLesson();
+            cloneTextLesson.material.SetNewGuidMaterial();
+            byte[] cloneLessonVersion = new byte[] { 2, 2, 2, 2, 2, 2, 2, 2 };
+            cloneTextLesson.SetVersion(cloneLessonVersion);
+            ShowInfoAboutLesson(cloneTextLesson);
+            Console.WriteLine("Testing the Equality of Lessons after changes : "); 
+            if (textLesson.Equals(cloneTextLesson))
+                Console.WriteLine("Lessons are the same");
+            else
+                Console.WriteLine("Lessons are not the same");
             Console.WriteLine();
-            Console.WriteLine("Type second lesson - " + type2);
-            Console.WriteLine("Description : " + lesson2.ToString());
-            lesson2.SetNewGuidLesson();
-            Console.WriteLine(lesson2.guid);
+            //Test video lesson
+            TrainingLesson videoLesson = new TrainingLesson(new VideoMaterial("http://video.com", "http://picture.com", Types.VideoFormat.Mp4, "First video lesson"));
+            videoLesson.Description = "Second lesson";
+            videoLesson.SetNewGuidLesson();
+            videoLesson.material.SetNewGuidMaterial();
+            byte[] videoLessonVersion = new byte[] {3, 3, 3, 3, 3, 3, 3, 3};
+            byte[] videoVersion = new byte[] { 4, 4, 4, 4, 4, 4, 4, 4};
+            videoLesson.SetVersion(videoLessonVersion);
+            VideoMaterial videoMaterial = (VideoMaterial)videoLesson.material;
+            videoMaterial.SetVersion(videoVersion);
+            ShowInfoAboutLesson(videoLesson);
+
+            
+
+        }
+        static void ShowInfoAboutLesson(TrainingLesson lesson)
+        {
+            TypeOfLesson typeOfLesson = lesson.GetTypeOfLesson();
+            Console.WriteLine(lesson.ToString());
+            Console.WriteLine("Type of lesson - " + typeOfLesson);
+            Console.WriteLine("Description of material lesson - " + lesson.material.ToString());
+            Console.WriteLine("Lesson GUID - " + lesson.guid);
+            Console.WriteLine("Material GUID - " + lesson.material.guid);
+            byte [] version = lesson.GetVersion();
+            string lessonVersion = String.Empty;
+            for (int i = 0; i < version.Length; i++)
+                lessonVersion += version[i];
+            Console.WriteLine("Lesson version - " + lessonVersion);
+            if(typeOfLesson == TypeOfLesson.VideoLesson)
+            {
+               VideoMaterial material = (VideoMaterial)lesson.material;
+               byte[] videoLessonVersion = material.GetVersion();
+               string videoVersion = String.Empty;
+               for (int i = 0; i < videoLessonVersion.Length; i++)
+                    videoVersion += videoLessonVersion[i];
+                Console.WriteLine("VideoMaterial version - " + videoVersion);
+            }
             Console.WriteLine();
-            Console.WriteLine("Comparison lessons : ");
-            Console.WriteLine("Lesson1 with Lesson1 = " + lesson.Equals(lesson));
-            Console.WriteLine("Lesson1 with Lesson2 = " + lesson.Equals(lesson2));
-            Console.WriteLine();
-            Console.WriteLine("Comparison materials : ");
-            Console.WriteLine("Material1 with Material1 = " + material.Equals(material));
-            Console.WriteLine("Material1 with Material2 = " + material.Equals(material2));
-            Console.WriteLine();
-            IVersionable material3 = (VideoMaterial)material;
-            byte[] versionMaterial3 = material3.GetVersion();
-            Console.Write("Default Version of Material = ");
-            for (int i = 0; i < versionMaterial3.Length; i++)
-                Console.Write(versionMaterial3[i]);
-            Console.WriteLine();
-            material3.SetVersion(new byte[]{ 1, 2, 3, 4, 5, 6, 7, 8});
-            versionMaterial3 = material3.GetVersion();
-            Console.Write("Change Version of Material = ");
-            for (int i = 0; i < versionMaterial3.Length; i++)
-                Console.Write(versionMaterial3[i]);
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Check Clone object TraningVideoLesson : ");
-            TrainingLesson newLesson = (TrainingLesson)lesson.Clone();
-            VideoMaterial newMaterial = (VideoMaterial)newLesson.material;
-            newMaterial.videoUri = "https://video2.com"; //изменяем путь к видео в клоне
-            type = newLesson.GetTypeOfLesson();
-            Console.WriteLine("Type of lesson - " + type);
-            Console.WriteLine("Description of cloned leeson : " + newLesson.ToString());
-            Console.WriteLine(newLesson.guid);
-            Console.WriteLine("Version of cloned lesson : ");
-            lesson3 = (TrainingLesson)newLesson;
-            lesson3.SetVersion(new byte[] { 2, 2, 2, 2, 2, 2, 2, 2 });
-            lesson3Version = lesson3.GetVersion();
-            for (int i = 0; i < lesson3Version.Length; i++)
-                Console.Write(lesson3Version[i]);
-            Console.WriteLine();
-            Console.WriteLine();
-            newLesson.SetNewGuidLesson(); //присваеваем новый GUID клону
-            Console.WriteLine("New guid for clone lesson - " + newLesson.guid); //Проверка изменился ли guid только в клоне или же и в клоне и в изначальном уроке.
-            Console.WriteLine("Guid of lesson - " + lesson.guid);
         }
     }
 }

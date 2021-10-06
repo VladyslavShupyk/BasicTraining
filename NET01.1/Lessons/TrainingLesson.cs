@@ -12,9 +12,22 @@ namespace NET01._1.Lessons
 {
     class TrainingLesson : IVersionable , ICloneable
     {
+        const int maxLengthDescription = 256;
         public TrainingMaterial material;
-        public byte[] version;
-        public Guid guid;
+        byte[] version;
+        public Guid guid { get; set; }
+        string description = null;
+        public string Description
+        {
+            get { return description; }
+            set
+            {
+                if (value.Length <= maxLengthDescription)
+                    description = value;
+                else
+                    throw new Exception("The description can contain up to 256 characters");
+            }
+        }
         public TrainingLesson(TrainingMaterial material)
         {
             guid = Guid.Empty;
@@ -29,7 +42,10 @@ namespace NET01._1.Lessons
         }
         public override string ToString()
         {
-            return material.ToString();
+            if (Description == null || Description == String.Empty)
+                return "Lesson don't have description";
+            else
+                return Description;
         }
         public bool Equals(TrainingLesson lesson)
         {
@@ -50,13 +66,19 @@ namespace NET01._1.Lessons
         public void SetVersion(byte [] version)
         {
             if (version.Length == 8)
-                this.version = version;
+            {
+                for (int i = 0; i < version.Length; i++)
+                    this.version[i] = version[i];
+            }
+            else
+                throw new Exception("Version not contain 8 byte array.");
         }
         public object Clone()
         {
             TrainingLesson newLesson = new TrainingLesson(this.material);
             newLesson.guid = this.guid;
             newLesson.version = this.version;
+            newLesson.Description = this.Description;
             return newLesson;
         }
     }

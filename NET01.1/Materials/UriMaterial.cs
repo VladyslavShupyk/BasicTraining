@@ -9,19 +9,28 @@ namespace NET01._1.Materials
     class UriMaterial : TrainingMaterial
     {
         public string Uri { get; set; }
-        UriFormat Format { get; set; }
-        public UriMaterial(string Uri, UriFormat Format)
+        Types.UriFormat Format { get; set; }
+        public UriMaterial(string uri, Types.UriFormat format)
         {
-            this.Uri = Uri;
-            this.Format = Format;
+            if (uri == String.Empty)
+                throw new Exception("Uri cannot be empty");
+            else if(uri == null)
+                throw new Exception("Uri cannot be empty");
+            else
+            {
+                Uri = uri;
+                Format = format;
+            }
         }
-        public UriFormat GetUriFormat()
+        public UriMaterial(string uri, Types.UriFormat format, string description)
         {
-            return this.Format;
+            Uri = uri;
+            Format = format;
+            Description = description;
         }
-        public override string ToString()
+        public Types.UriFormat GetUriFormat()
         {
-            return Uri;
+            return Format;
         }
     }
 }
