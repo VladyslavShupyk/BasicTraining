@@ -52,9 +52,15 @@ namespace NET01._1
             VideoMaterial videoMaterial = (VideoMaterial)videoLesson.material;
             videoMaterial.SetVersion(videoVersion);
             ShowInfoAboutLesson(videoLesson);
-
-            
-
+            //Test exception when trying to create uri lesson with null string uri
+            try
+            {
+                TrainingLesson uriLesson = new TrainingLesson(new UriMaterial(null, Types.UriFormat.Html));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         static void ShowInfoAboutLesson(TrainingLesson lesson)
         {
