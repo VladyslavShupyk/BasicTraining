@@ -92,24 +92,24 @@ namespace NET02._1
                         from author in book.authors
                         where author.FirstName == firstName && author.LastName == lastName
                         select book;
-            List<Book> new_books = new List<Book>();
+            List<Book> newBooks = new List<Book>();
             foreach(var book in books)
             {
-                new_books.Add(book);
+                newBooks.Add(book);
             }
-            return new_books;
+            return newBooks;
         }
         public List<Book> GetBooksByDateSortedDescending()
         {
             var books = from book in this.books
                         orderby book.Date descending
                         select book;
-            List<Book> new_books = new List<Book>();
+            List<Book> newBooks = new List<Book>();
             foreach (var book in books)
             {
-                new_books.Add(book);
+                newBooks.Add(book);
             }
-            return new_books;
+            return newBooks;
         }
         public List<Tuple<Author,int>> GetTuples()
         {
