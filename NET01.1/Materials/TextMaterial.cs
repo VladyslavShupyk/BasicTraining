@@ -1,26 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NET01._1.Materials
 {
     class TextMaterial : TrainingMaterial
     {
-        const int maxLengthText = 10000;
-        string text;
+        const int _MAX_TEXT_LENGTH = 10000;
+        string _text;
         public string Text
         {
-            get { return text; }
+            get { return _text; }
             set
             {
-                if (value.Length <= maxLengthText)
-                    text = value;
+                if(String.IsNullOrEmpty(value))
+                {
+                    throw new Exception($"The text can't be empty or null");
+                }
+                if (value.Length <= _MAX_TEXT_LENGTH)
+                {
+                    _text = value;
+                }
                 else
-                    throw new Exception("The text can contain up to 10,000 characters.");
+                {
+                    throw new Exception($"The text can contain up to {_MAX_TEXT_LENGTH} characters");
+                }
             }
         }
+        #region Constructors
         public TextMaterial(string text)
         {
             Text = text;
@@ -30,5 +35,6 @@ namespace NET01._1.Materials
             Description = description;
             Text = text;
         }
+        #endregion
     }
 }

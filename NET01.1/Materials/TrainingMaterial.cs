@@ -1,44 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NET01._1.Materials
 {
     class TrainingMaterial
     {
-        const int maxLengthDescription = 256;
+        const int _MAX_LENGTH_DESCRIPTION = 256;
+        string _description = null;
         public Guid guid { get; set; }
-        string description = null;
         public string Description
         {
-            get { return description; }
+            get { return _description; }
             set
             {
-                if (value.Length <= maxLengthDescription)
-                    description = value;
+                if (value.Length <= _MAX_LENGTH_DESCRIPTION || String.IsNullOrEmpty(value))
+                {
+                    _description = value;
+                }
                 else
-                    throw new Exception("The description can contain up to 256 characters");
+                {
+                    throw new Exception($"The description can contain up to {_MAX_LENGTH_DESCRIPTION} characters");
+                }
             }
         }
         public bool Equals(TrainingMaterial material)
         {
-            if (this.guid == material.guid)
-                return true;
-            return false;
+            return this.guid == material.guid;
         }
         public override bool Equals(object obj)
         {
-            return Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+            if (obj is TrainingMaterial)
+            {
+                return Equals(obj as TrainingMaterial);
+            }
+            return false;
         }
         public override string ToString()
         {
-            if (Description == null || Description == String.Empty)
+            if (String.IsNullOrEmpty(Description))
+            {
                 return "Material don't have description";
+            }
             else
+            {
                 return Description;
+            }
         }
     }
-
 }

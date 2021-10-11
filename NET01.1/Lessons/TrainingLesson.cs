@@ -2,84 +2,138 @@
 using NET01._1.Materials;
 using NET01._1.Versions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NET01._1.Lessons
 {
     class TrainingLesson : IVersionable , ICloneable
     {
-        const int maxLengthDescription = 256;
-        public TrainingMaterial material;
-        byte[] version;
+        const int _MAX_LENGTH_DESCRIPTION = 256;
+        const int _VERSION_BYTES = 8;
+        string _description;
         public Guid guid { get; set; }
-        string description = null;
+        byte [] _version;
+        public TrainingMaterial [] materials;
         public string Description
         {
-            get { return description; }
+            get { return _description; }
             set
             {
-                if (value.Length <= maxLengthDescription)
-                    description = value;
+                if (value.Length <= _MAX_LENGTH_DESCRIPTION || String.IsNullOrEmpty(value))
+                {
+                    _description = value;
+                }
                 else
-                    throw new Exception("The description can contain up to 256 characters");
+                {
+                    throw new Exception($"The description can contain up to {_MAX_LENGTH_DESCRIPTION} characters");
+                }  
             }
         }
-        public TrainingLesson(TrainingMaterial material)
+        #region Constructors
+        public TrainingLesson(params TrainingMaterial[] materials)
         {
+            Description = String.Empty;
+            this.materials = new TrainingMaterial[materials.Length];
+            Array.Copy(materials, this.materials, materials.Length);
             guid = Guid.Empty;
-            this.material = material;
-            version = new byte[8]; 
+            _version = new byte[_VERSION_BYTES];
         }
-        public TypeOfLesson GetTypeOfLesson()
+        public TrainingLesson(string description, params TrainingMaterial[] materials)
         {
-            if (this.material.GetType() == typeof(VideoMaterial))
-                return TypeOfLesson.VideoLesson;
-            return TypeOfLesson.TextLesson;
+            Description = description;
+            this.materials = new TrainingMaterial[materials.Length];
+            Array.Copy(materials, this.materials, materials.Length);
+            guid = Guid.Empty;
+            _version = new byte[_VERSION_BYTES];
+        }
+        #endregion
+        public TypeLesson GetLessonType()
+        {
+            for (int i = 0; i < materials.Length; i++)
+            {
+                if(materials[i].GetType() == typeof(VideoMaterial))
+                {
+                    return TypeLesson.VideoLesson;
+                }
+            }
+            return TypeLesson.TextLesson;
         }
         public override string ToString()
         {
-            if (Description == null || Description == String.Empty)
+            if (String.IsNullOrEmpty(Description))
+            {
                 return "Lesson don't have description";
+            }
             else
+            {
                 return Description;
+            }  
         }
         public bool Equals(TrainingLesson lesson)
         {
-            if (this.guid == lesson.guid)
-                return true;
-            return false;
+            return this.guid == lesson.guid;
         }
         public override bool Equals(object obj)
         {
-            return Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+            if (obj is TrainingLesson)
+            {
+                return Equals(obj as TrainingLesson);
+            }
+            return false;
         }
 
         public byte [] GetVersion()
         {
-            return this.version;
+            return _version;
         }
 
         public void SetVersion(byte [] version)
         {
-            if (version.Length == 8)
+            if (version.Length == _VERSION_BYTES)
             {
-                for (int i = 0; i < version.Length; i++)
-                    this.version[i] = version[i];
+                Array.Copy(version, this._version, _VERSION_BYTES);
             }
             else
-                throw new Exception("Version not contain 8 byte array.");
+            {
+                throw new Exception($"Version not contain {_VERSION_BYTES} byte array.");
+            }
         }
         public object Clone()
         {
-            TrainingLesson newLesson = new TrainingLesson(this.material);
-            newLesson.guid = this.guid;
-            newLesson.version = this.version;
-            newLesson.Description = this.Description;
-            return newLesson;
+            TrainingMaterial [] newMaterials = new TrainingMaterial[materials.Length];
+            for (int i = 0; i < newMaterials.Length; i++)
+            {
+                if (materials[i].GetType() == typeof(TextMaterial))
+                {
+                    TextMaterial material = (TextMaterial)materials[i];
+                    newMaterials[i] = new TextMaterial(material.Text,material.Description);
+                    newMaterials[i].guid = material.guid;
+                }
+                else if (materials[i].GetType() == typeof(VideoMaterial))
+                {
+                    VideoMaterial material = (VideoMaterial)materials[i];
+                    newMaterials[i] = new VideoMaterial(material.VideoUri,material.PictureUri,material.Format,material.Description);
+                    newMaterials[i].guid = material.guid;
+                }
+                else
+                {
+                    UriMaterial material = (UriMaterial)materials[i];
+                    newMaterials[i] = new UriMaterial(material.Uri, material.Format, material.Description);
+                    newMaterials[i].guid = material.guid;
+                }
+            }
+            byte[] newVersion = new byte[_VERSION_BYTES];
+            Array.Copy(_version, newVersion, _VERSION_BYTES);
+            return new TrainingLesson
+            {
+                Description = this.Description,
+                guid = this.guid,
+                _version = newVersion,
+                materials = newMaterials
+            };
         }
     }
 }
