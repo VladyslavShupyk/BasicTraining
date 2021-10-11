@@ -5,7 +5,7 @@ namespace NET01._2
 {
     class Program
     {
-        delegate void ChangeValue (int indexI, int indexJ, int value);
+        delegate void ChangeValue (int i, int j, int value);
         /// <summary>
         /// Test Maxtrix classes
         /// </summary>
@@ -78,14 +78,14 @@ namespace NET01._2
             integerMatrix.ChangeValueOfSquareMatrix(0, 0, 10);
             Console.WriteLine(integerMatrix.ToString());
             //Change value by anonymous method
-            ChangeValue operation = delegate (int indexI, int indexJ, int value)
+            ChangeValue operation = delegate (int i, int j, int value)
             {
-                integerMatrix[indexI, indexJ] = value;
+                integerMatrix[i, j] = value;
             };
             operation(3, 3, 10);
             Console.WriteLine(integerMatrix.ToString()); Console.WriteLine();
             //Change value by lyambda operation 
-            operation = (indexI, indexJ, value) => integerMatrix[indexI, indexJ] = value;
+            operation = (i, j, value) => integerMatrix[i, j] = value;
             operation(4, 1, 30);
             Console.WriteLine(integerMatrix.ToString()); Console.WriteLine();
         }

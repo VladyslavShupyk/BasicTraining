@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NET01._2.Matriсes
 {
@@ -12,103 +10,77 @@ namespace NET01._2.Matriсes
     /// <typeparam name="T"></typeparam>
     class SquareMatrix<T>
     {
-        T [] array;
-        int size;
-        delegate void ChangeValueHandler(int indexI, int IndexJ, T value);
-        event ChangeValueHandler Notify;
-        /// <summary>
-        /// Constructor of matrix
-        /// </summary>
-        /// <param name="size"></param>
+        T [] _array;
+        int _size;
+        delegate void ChangeValueHandler(int i, int j, T value);
+        event ChangeValueHandler _Notify;
         public SquareMatrix(int size)
         {
-            if (size >= 0)
-            {
-                array = new T[size * size];
-                this.size = size;
-            }
-            else
-                throw new Exception("Size of matrix can't be negative.");
+            Size = size;
+            _array = new T[Size * Size];
         }
         /// <summary>
-        /// Matrix size access property 
+        /// Property Size
         /// </summary>
-        public int Size
+        /// <returns>Size of square matrix</returns>
+        public virtual int Size
         {
-            get
-            {
-                return size;
-            }
+            get { return _size; }
             set
             {
-                if (size >= 0)
+                if (value >= 0)
                 {
-                    array = new T[value * value];
-                    size = value;
+                    _size = value;
                 }
                 else
+                {
                     throw new Exception("Size of matrix can't be negative.");
+                }
             }
         }
         /// <summary>
-        /// Matrix array access indexer
+        /// Matrix array access indexer 
         /// </summary>
-        /// <param name="indexI"></param>
-        /// <param name="indexJ"></param>
-        /// <returns>Element by index</returns>
-        /// <sets>Value by index</sets>
-        public T this[int indexI, int indexJ]
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        public virtual T this[int i, int j]
         {
             get
             {
-                if (indexI >= 0 && indexI < size && indexJ >= 0 && indexJ < size)
+                if (CheckIndex(i, j))
                 {
-                    int indexOfElement = 0;
-                    for (int i = 0; i < size; i++)
-                    {
-                        for (int j = 0; j < size; j++)
-                        {
-                            if (i == indexI && j == indexJ)
-                            {
-                                break;
-                            }
-                            indexOfElement++;
-                        }
-                    }
-                    return array[indexOfElement];
+                    return _array[i * _size + j];
                 }
                 else
-                    throw new Exception("Invalid element index");
+                {
+                    throw new IndexOutOfRangeException();
+                }
             }
             set
             {
-                if (indexI >= 0 && indexI < size && indexJ >= 0 && indexJ < size)
+                if(CheckIndex(i,j))
                 {
-                    int indexOfElement = 0;
-                    for (int i = 0; i < size; i++)
-                    {
-                        for (int j = 0; j < size; j++)
-                        {
-                            if (i == indexI && j == indexJ)
-                            {
-                                T item1 = array[indexOfElement];
-                                T item2 = value;
-                                if(!EqualityComparer<T>.Default.Equals(item1, item2))
-                                {
-                                    Notify += ChangeValue;
-                                    Notify(i, j, array[indexOfElement]);
-                                    Notify -= ChangeValue;
-                                    array[indexOfElement] = value;
-                                    break;
-                                }
-                            }
-                            indexOfElement++;
-                        }
-                    }
+                    _Notify += ChangeValue;
+                    _Notify(i, j, _array[i * _size + j]);
+                    _Notify -= ChangeValue;
+                    _array[i * _size + j] = value;
                 }
                 else
-                    throw new Exception("Invalid element index");
+                {
+                    throw new IndexOutOfRangeException();
+                }
             }
+        }
+        /// <summary>
+        /// Method for Check valid index in square matrix
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        public bool CheckIndex(int i, int j)
+        {
+            return i >= 0 && i < Size && j >= 0 && j < Size;
         }
         /// <summary>
         /// Ovveriden method ToString()
@@ -116,57 +88,40 @@ namespace NET01._2.Matriсes
         /// <returns>String representation of a matrix</returns>
         public override string ToString()
         {
-            int sizeOfMatrix = Size;
-            string outputMatrix = String.Empty;
-            for (int i = 0; i < array.Length; i++)
+            StringBuilder outputString = new StringBuilder();
+            for (int i = 0; i < _size; i++)
             {
-                outputMatrix += array[i] + " ";
-                if (i == sizeOfMatrix - 1)
+                for (int j = 0; j < _size; j++)
                 {
-                    outputMatrix += "\n";
-                    sizeOfMatrix += Size;
+                    outputString.Append(_array[i * _size + j] + " ");
                 }
+                outputString.Append("\n");
             }
-            return outputMatrix;
+            return outputString.ToString();
         }
-        private void ChangeValue(int indexI, int indexJ, T value)
+        private void ChangeValue(int i, int j, T value)
         {
-            Console.WriteLine($"Element with index [{indexI},{indexJ}] was changed, old value = {value}");
+            Console.WriteLine($"Element with index [{i},{j}] was changed, old value = {value}");
         }
         /// <summary>
         /// Method for change value from code without indexer
         /// </summary>
-        /// <param name="indexI"></param>
-        /// <param name="indexJ"></param>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
         /// <param name="value"></param>
-        public void ChangeValueOfSquareMatrix(int indexI, int indexJ, T value)
+        public void ChangeValueOfSquareMatrix(int i, int j, T value)
         {
-            if (indexI >= 0 && indexI < size && indexJ >= 0 && indexJ < size)
+            if (CheckIndex(i,j))
             {
-                int indexOfElement = 0;
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        if (i == indexI && j == indexJ)
-                        {
-                            T item1 = array[indexOfElement];
-                            T item2 = value;
-                            if (!EqualityComparer<T>.Default.Equals(item1, item2))
-                            {
-                                Notify += ChangeValue;
-                                Notify(i, j, array[indexOfElement]);
-                                Notify -= ChangeValue;
-                                array[indexOfElement] = value;
-                                break;
-                            }
-                        }
-                        indexOfElement++;
-                    }
-                }
+                _Notify += ChangeValue;
+                _Notify(i, j, _array[i * _size + j]);
+                _Notify -= ChangeValue;
+                _array[i * _size + j] = value;
             }
             else
-                throw new Exception("Invalid element index");
+            {
+                throw new IndexOutOfRangeException();
+            }
         }
     }
 }
