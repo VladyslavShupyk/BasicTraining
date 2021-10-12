@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <login name = "Vladyslav">
+		<window title = "main">
+			<top>10</top>
+			<left>20</left>
+			<width>400</width>
+			<height>200</height>
+		</window>
+    </login>
+	<login name = "Evgen">
+		<window title = "main">
+		</window>
+		<window title = "help">
+			<top>30</top>
+			<left>40</left>
+			<width>200</width>
+			<height>500</height>
+		</window>
+	</login>
+	<login name = "Julia">
+		<window title = "main">
+			<top>10</top>
+			<left>20</left>
+			<width>400</width>
+			<height>200</height>
+		</window>
+		<window title = "help">
+			<top>30</top>
+			<left>40</left>
+			<width>200</width>
+			<height>500</height>
+		</window>
+	</login>
+</config>
