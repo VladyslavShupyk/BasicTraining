@@ -77,6 +77,10 @@ namespace NET02._1
             Date = date;
         }
         #endregion
+        public void AddAuthor(Author author)
+        {
+            authors.Add(author);
+        }
         public override string ToString()
         {
             StringBuilder outputString = new StringBuilder();
