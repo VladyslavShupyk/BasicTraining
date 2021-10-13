@@ -9,28 +9,7 @@ namespace NET01._2.Matriсes
     /// <typeparam name="T"></typeparam>
     class DiagonalMatrix<T> : SquareMatrix<T>
     {
-        T [] _array;
-        int _size;
-        delegate void ChangeValueHandler(int i, int j, T value);
-        event ChangeValueHandler _Notify;
-        /// <summary>
-        /// Property Size
-        /// </summary>
-        /// <returns>Size of diagonal matrix</returns>
-        public override int Size
-        {
-            get { return _size; }
-            set
-            {
-                if (value >= 0)
-                {
-                    _size = value;
-                }
-                else
-                    throw new Exception("Size of matrix can't be negative.");
-            }
-        }
-        public DiagonalMatrix(int size) : base(size)
+        public DiagonalMatrix(int size)
         {
             Size = size;
             _array = new T[Size];
@@ -59,20 +38,17 @@ namespace NET01._2.Matriсes
             {
                 if(CheckIndex(i,j))
                 {
-                    _Notify += ChangeValue;
-                    _Notify(i, j, _array[i]);
-                    _Notify -= ChangeValue;
-                    _array[i] = value;
+                    if (!_array[i].Equals(value))
+                    {
+                        OnNotifyChange(i, j, _array[i]);
+                        _array[i] = value;
+                    }
                 }
                 else
                 {
                     throw new IndexOutOfRangeException();
                 }
             }
-        }
-        private void ChangeValue(int i, int j, T value)
-        {
-            Console.WriteLine($"Element with index [{i},{j}] was changed, old value = {value}");
         }
         /// <summary>
         /// Ovveriden method ToString()
@@ -81,9 +57,9 @@ namespace NET01._2.Matriсes
         public override string ToString()
         {
             StringBuilder outputstring = new StringBuilder();
-            for (int i = 0; i < _size; i++)
+            for (int i = 0; i < Size; i++)
             {
-                for (int j = 0; j < _size; j++)
+                for (int j = 0; j < Size; j++)
                 {
                     if (i != j)
                     {
@@ -104,21 +80,22 @@ namespace NET01._2.Matriсes
         /// <param name="i"></param>
         /// <param name="j"></param>
         /// <param name="value"></param>
-        public void ChangeValueOfDiagonalMatrix(int i, int j, T value)
+        public override void ChangeValueOfMatrix(int i, int j, T value)
         {
             if(CheckIndex(i,j))
             {
-                _Notify += ChangeValue;
-                _Notify(i, j, _array[i]);
-                _Notify -= ChangeValue;
-                _array[i] = value;
+                if (!_array[i].Equals(value))
+                {
+                    OnNotifyChange(i, j, _array[i]);
+                    _array[i] = value;
+                }
             }
             else
             {
                 throw new IndexOutOfRangeException();
             }
         }
-        private bool CheckIndex(int i, int j)
+        protected override bool CheckIndex(int i, int j)
         {
             return i == j;
         }

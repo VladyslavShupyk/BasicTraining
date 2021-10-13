@@ -8,22 +8,23 @@ namespace NET01._2.Matriсes
     /// Class describing a square matrix
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    class SquareMatrix<T>
+    public class SquareMatrix<T>
     {
-        T [] _array;
+        protected T [] _array;
         int _size;
-        delegate void ChangeValueHandler(int i, int j, T value);
-        event ChangeValueHandler _Notify;
+        public delegate void ChangeValueHandler(int i, int j, T value);
+        public event ChangeValueHandler NotifyChange;
         public SquareMatrix(int size)
         {
             Size = size;
             _array = new T[Size * Size];
         }
+        protected SquareMatrix() { }
         /// <summary>
         /// Property Size
         /// </summary>
         /// <returns>Size of square matrix</returns>
-        public virtual int Size
+        public int Size
         {
             get { return _size; }
             set
@@ -50,7 +51,7 @@ namespace NET01._2.Matriсes
             {
                 if (CheckIndex(i, j))
                 {
-                    return _array[i * _size + j];
+                    return _array[i * Size + j];
                 }
                 else
                 {
@@ -61,10 +62,11 @@ namespace NET01._2.Matriсes
             {
                 if(CheckIndex(i,j))
                 {
-                    _Notify += ChangeValue;
-                    _Notify(i, j, _array[i * _size + j]);
-                    _Notify -= ChangeValue;
-                    _array[i * _size + j] = value;
+                    if (!_array[i * Size + j].Equals(value))
+                    {
+                        OnNotifyChange(i, j, _array[i * Size + j]);
+                        _array[i * Size + j] = value;
+                    }
                 }
                 else
                 {
@@ -78,7 +80,7 @@ namespace NET01._2.Matriсes
         /// <param name="i"></param>
         /// <param name="j"></param>
         /// <returns></returns>
-        public bool CheckIndex(int i, int j)
+        protected virtual bool CheckIndex(int i, int j)
         {
             return i >= 0 && i < Size && j >= 0 && j < Size;
         }
@@ -89,19 +91,19 @@ namespace NET01._2.Matriсes
         public override string ToString()
         {
             StringBuilder outputString = new StringBuilder();
-            for (int i = 0; i < _size; i++)
+            for (int i = 0; i < Size; i++)
             {
-                for (int j = 0; j < _size; j++)
+                for (int j = 0; j < Size; j++)
                 {
-                    outputString.Append(_array[i * _size + j] + " ");
+                    outputString.Append(_array[i * Size + j] + " ");
                 }
                 outputString.Append("\n");
             }
             return outputString.ToString();
         }
-        private void ChangeValue(int i, int j, T value)
+        protected void OnNotifyChange(int i, int j, T value)
         {
-            Console.WriteLine($"Element with index [{i},{j}] was changed, old value = {value}");
+            NotifyChange?.Invoke(i, j, value);
         }
         /// <summary>
         /// Method for change value from code without indexer
@@ -109,13 +111,11 @@ namespace NET01._2.Matriсes
         /// <param name="i"></param>
         /// <param name="j"></param>
         /// <param name="value"></param>
-        public void ChangeValueOfSquareMatrix(int i, int j, T value)
+        public virtual void ChangeValueOfMatrix(int i, int j, T value)
         {
             if (CheckIndex(i,j))
             {
-                _Notify += ChangeValue;
-                _Notify(i, j, _array[i * _size + j]);
-                _Notify -= ChangeValue;
+                OnNotifyChange(i, j, _array[i * Size + j]);
                 _array[i * _size + j] = value;
             }
             else

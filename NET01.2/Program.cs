@@ -5,89 +5,47 @@ namespace NET01._2
 {
     class Program
     {
-        delegate void ChangeValue (int i, int j, int value);
         /// <summary>
         /// Test Maxtrix classes
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            SquareMatrix<int> integerMatrix = new SquareMatrix<int>(5);
-            integerMatrix[1, 1] = 8;
-            Console.WriteLine(integerMatrix.ToString());
-            Console.WriteLine("Element with index [1,1] = " + integerMatrix[1, 1] + "\n");
-            //Try to check matrix with negative size
+            SquareMatrix<int> squareMatrix = new SquareMatrix<int>(5);
+            Console.WriteLine("Squre matrix : \n" + squareMatrix.ToString());
+            squareMatrix.NotifyChange += ShowChanges;
+            squareMatrix[2, 2] = 5;
+            Console.WriteLine("Squre matrix : \n" + squareMatrix.ToString());
+            squareMatrix[2, 2] = 10;
+            Console.WriteLine("Squre matrix : \n" + squareMatrix.ToString());
+            Console.WriteLine("Try to change elemet with incorrect index : ");
             try
             {
-                Console.WriteLine("Check matrix with negative size : ");
-                SquareMatrix<int> integerMatrix2 = new SquareMatrix<int>(-5);
+                squareMatrix[5, 5] = 20;
             }
-            catch (Exception exaption)
+            catch(Exception exception)
             {
-                Console.WriteLine(exaption.Message);
+                Console.WriteLine(exception.Message); 
             }
             Console.WriteLine();
-            //Try to check matrix with change incorrect index
-            try
+            DiagonalMatrix<int> diagonalMatrix = new DiagonalMatrix<int>(5);
+            Console.WriteLine("Diagonal matrix : \n" + diagonalMatrix.ToString());
+            diagonalMatrix.NotifyChange += ShowChanges;
+            diagonalMatrix[1, 1] = 1;
+            Console.WriteLine("Diagonal matrix : \n" + diagonalMatrix.ToString());
+            diagonalMatrix[0, 0] = 1;
+            Console.WriteLine("Diagonal matrix : \n" + diagonalMatrix.ToString());
+            diagonalMatrix[0, 0] = 1; //Check event not call if values are equal
+            diagonalMatrix.NotifyChange += (i, j, value) => { Console.WriteLine("Value of matrix[" + i + "," + j + "] changed, Old value matrix[" + i + "," + j + "] = " + value); };
+            diagonalMatrix.NotifyChange += delegate (int i, int j, int value)
             {
-                Console.WriteLine("Checking for matrix change by wrong index : ");
-                SquareMatrix<int> integerMatrix2 = new SquareMatrix<int>(5);
-                integerMatrix2[5, 1] = 30;
-                Console.WriteLine(integerMatrix2.ToString());
-            }
-            catch (Exception exaption)
-            {
-                Console.WriteLine(exaption.Message);
-            }
-            Console.WriteLine();
-            //Create diagonal matrix
-            DiagonalMatrix<int> diagonalIntegerMatrix = new DiagonalMatrix<int>(5);
-            Console.WriteLine(diagonalIntegerMatrix.ToString());
-            diagonalIntegerMatrix[1, 1] = 1;
-            Console.WriteLine(diagonalIntegerMatrix.ToString());
-            //Try to change value not diagonal element
-            try
-            {
-                Console.WriteLine("Check to change not diagonal element of matrix :");
-                diagonalIntegerMatrix[1, 2] = 1;
-            }
-            catch (Exception exaption)
-            {
-                Console.WriteLine(exaption.Message);
-            }
-            //Try to change value not in correct index
-            try
-            {
-                Console.WriteLine("Check to change incorrect index of matrix :");
-                diagonalIntegerMatrix[5, 5] = 1;
-            }
-            catch (Exception exaption)
-            {
-                Console.WriteLine(exaption.Message);
-            }
-            Console.WriteLine();
-            //Check diagonal matrix with string type
-            DiagonalMatrix<string> diagonalMatrix = new DiagonalMatrix<string>(5);
-            diagonalMatrix[0, 0] = "1";
-            diagonalMatrix[1, 1] = "1";
-            diagonalMatrix[2, 2] = "1";
-            diagonalMatrix[3, 3] = "1";
-            diagonalMatrix[4, 4] = "1";
-            Console.WriteLine(diagonalMatrix.ToString());
-            //Change value by method
-            integerMatrix.ChangeValueOfSquareMatrix(0, 0, 10);
-            Console.WriteLine(integerMatrix.ToString());
-            //Change value by anonymous method
-            ChangeValue operation = delegate (int i, int j, int value)
-            {
-                integerMatrix[i, j] = value;
+                Console.WriteLine("Value of matrix[" + i + "," + j + "] changed, Old value matrix[" + i + "," + j + "] = " + value);
             };
-            operation(3, 3, 10);
-            Console.WriteLine(integerMatrix.ToString()); Console.WriteLine();
-            //Change value by lyambda operation 
-            operation = (i, j, value) => integerMatrix[i, j] = value;
-            operation(4, 1, 30);
-            Console.WriteLine(integerMatrix.ToString()); Console.WriteLine();
+            diagonalMatrix[2, 2] = 1;
+        }
+        private static void ShowChanges(int i, int j, int value)
+        {
+            Console.WriteLine("Value of matrix[" + i + "," + j + "] changed, Old value matrix[" + i + "," + j +"] = " + value);
         }
     }
 }
