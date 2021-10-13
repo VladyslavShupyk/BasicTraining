@@ -30,6 +30,7 @@ namespace NET02._2
             {
                 Console.WriteLine("Don't have users with incorrect configuration");
             }
+            users.CreateJsonFiles();
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NET02._2
 {
@@ -26,7 +24,7 @@ namespace NET02._2
             foreach(Window window in windows)
             {
                 outputString.Append("  " + window.Title + "(");
-                if(!String.IsNullOrEmpty(window.Top))
+                if(window.Top.HasValue)
                 {
                     outputString.Append(window.Top + ", ");
                 }
@@ -34,7 +32,7 @@ namespace NET02._2
                 {
                     outputString.Append("?, ");
                 }
-                if (!String.IsNullOrEmpty(window.Left))
+                if (window.Left.HasValue)
                 {
                     outputString.Append(window.Left + ", ");
                 }
@@ -42,7 +40,7 @@ namespace NET02._2
                 {
                     outputString.Append("?, ");
                 }
-                if (!String.IsNullOrEmpty(window.Width))
+                if (window.Width.HasValue)
                 {
                     outputString.Append(window.Width + ", ");
                 }
@@ -50,7 +48,7 @@ namespace NET02._2
                 {
                     outputString.Append("?, ");
                 }
-                if (!String.IsNullOrEmpty(window.Height))
+                if (window.Height.HasValue)
                 {
                     outputString.Append(window.Height + ")\n");
                 }

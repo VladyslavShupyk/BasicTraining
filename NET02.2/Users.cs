@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml;
+using System.Text.Json;
 
 namespace NET02._2
 {
@@ -94,6 +94,27 @@ namespace NET02._2
                 usersList.Add(user);
             }
             return usersList;
+        }
+        public void CreateJsonFiles()
+        {
+            string jsonString = String.Empty;
+            foreach(User user in users)
+            {
+                foreach (Window window in user.windows)
+                {
+                    var User = new
+                    {
+                        Name = user.Name,
+                        Title = window.Title,
+                        Top = window.Top.HasValue ? window.Top : window.DEFAULT_TOP,
+                        Left = window.Left.HasValue ? window.Left : window.DEFAULT_LEFT,
+                        Width = window.Width.HasValue ? window.Width : window.DEFAULT_WIDTH,
+                        Height = window.Height.HasValue ? window.Height : window.DEFAULT_HEIGHT
+                    };
+                    jsonString = JsonSerializer.Serialize(User);
+                    Console.WriteLine(jsonString);
+                }
+            }
         }
     }
 }
