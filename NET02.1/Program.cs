@@ -35,7 +35,7 @@ namespace NET02._1
                 Console.WriteLine("Books are not the same");
             Console.WriteLine();
             Console.WriteLine("Show tuple of Author - count of books : ");
-            List<Tuple<Author, int>> tuple = catalog.GetTuples();
+            List<Tuple<Author, int>> tuple = catalog.GetAuthorsBooksCounts();
             foreach (var item in tuple)
                 Console.WriteLine(item.Item1.FirstName + " " + item.Item1.LastName + " - " + item.Item2 + " book");
             Console.WriteLine();

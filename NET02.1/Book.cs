@@ -55,6 +55,7 @@ namespace NET02._1
                 }
             }
         }
+        #region Constructors
         public Book(string name,string isbn)
         {
             Name = name;
@@ -75,6 +76,7 @@ namespace NET02._1
             authors.Add(author);
             Date = date;
         }
+        #endregion
         public override string ToString()
         {
             StringBuilder outputString = new StringBuilder();

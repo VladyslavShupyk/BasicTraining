@@ -2,17 +2,11 @@
 
 namespace NET02._1
 {
-    /// <summary>
-    /// Class describing Author of book
-    /// </summary>
     public class Author
     {
         const int _MAX_LENGTH = 200;
         string _firstName;
         string _lastName;
-        /// <summary>
-        /// Property of author first name
-        /// </summary>
         public string FirstName 
         {
             get
@@ -38,9 +32,6 @@ namespace NET02._1
                 }
             }
         }
-        /// <summary>
-        /// Property of author last name
-        /// </summary>
         public string LastName
         {
             get
@@ -70,10 +61,6 @@ namespace NET02._1
         {
             FirstName = name;
             LastName = lastname;
-        }
-        public override string ToString()
-        {
-            return FirstName + " " + LastName;
         }
     }
 }
