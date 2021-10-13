@@ -60,6 +60,7 @@ namespace NET02._1
         {
             Name = name;
             ISBN = isbn;
+            authors = new List<Author>();
         }
         public Book(string name, string isbn, Author author)
         {
