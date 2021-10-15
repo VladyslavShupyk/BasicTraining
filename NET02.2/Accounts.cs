@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Text.Json;
+using System.IO;
 
 namespace NET02._2
 {
-    class Users
+    class Accounts
     {
         public List<User> users;
-        public Users()
+        public Accounts()
         {
             users = new List<User>();
         }
@@ -45,23 +46,43 @@ namespace NET02._2
                             height = nodeChild2.InnerText;
                         }
                     }
+                    int? integerTop;
                     if (String.IsNullOrEmpty(top))
                     {
-                        top = null;
+                        integerTop = null;
                     }
+                    else
+                    {
+                        integerTop = int.Parse(top);
+                    }
+                    int? integerLeft;
                     if (String.IsNullOrEmpty(left))
                     {
-                        left = null;
+                        integerLeft = null;
                     }
+                    else
+                    {
+                        integerLeft = int.Parse(left);
+                    }
+                    int? integerWidth;
                     if (String.IsNullOrEmpty(width))
                     {
-                        width = null;
+                        integerWidth = null;
                     }
+                    else
+                    {
+                        integerWidth = int.Parse(width);
+                    }
+                    int? integerHeight;
                     if (String.IsNullOrEmpty(height))
                     {
-                        height = null;
+                        integerHeight = null;
                     }
-                    Window window = new Window(nodeChild1.Attributes.GetNamedItem("title").Value, top, left, width, height);
+                    else
+                    {
+                        integerHeight = int.Parse(height);
+                    }
+                    Window window = new Window(nodeChild1.Attributes.GetNamedItem("title").Value, integerTop, integerLeft,integerWidth,integerHeight);
                     user.AddWindow(window);
                 }
                 users.Add(user);
@@ -97,23 +118,27 @@ namespace NET02._2
         }
         public void CreateJsonFiles()
         {
-            string jsonString = String.Empty;
+            List<string> windowsSettings = new List<string>();
             foreach(User user in users)
             {
+                windowsSettings.Clear();
                 foreach (Window window in user.windows)
                 {
                     var User = new
                     {
-                        Name = user.Name,
                         Title = window.Title,
                         Top = window.Top.HasValue ? window.Top : window.DEFAULT_TOP,
                         Left = window.Left.HasValue ? window.Left : window.DEFAULT_LEFT,
                         Width = window.Width.HasValue ? window.Width : window.DEFAULT_WIDTH,
                         Height = window.Height.HasValue ? window.Height : window.DEFAULT_HEIGHT
                     };
-                    jsonString = JsonSerializer.Serialize(User);
-                    Console.WriteLine(jsonString);
+                    windowsSettings.Add(JsonSerializer.Serialize(User));
                 }
+                if (!Directory.Exists($"..\\..\\..\\Config"))
+                {
+                    Directory.CreateDirectory($"..\\..\\..\\Config");
+                }
+                File.AppendAllLines($"..\\..\\..\\Config\\{user.Name}.json", windowsSettings);
             }
         }
     }

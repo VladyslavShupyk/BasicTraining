@@ -10,7 +10,7 @@ namespace NET02._2
         {
             XmlDocument xml = new XmlDocument();
             xml.Load(@"..\..\..\XML\Users.xml");
-            Users users = new Users();
+            Accounts users = new Accounts();
             users.GetUsers(xml);
             foreach(User user in users.users)
             {

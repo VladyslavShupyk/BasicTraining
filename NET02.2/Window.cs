@@ -11,7 +11,7 @@
         public int? Left { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
-        public Window(string title, int top, int left, int width, int height)
+        public Window(string title, int? top, int? left, int? width, int? height)
         {
             Title = title;
             Top = top;
