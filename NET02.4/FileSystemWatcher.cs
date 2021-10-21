@@ -7,12 +7,12 @@ namespace NET02._4
     {
         public delegate void Change(Monitor monitor, XmlDocument document);
         public event Change ChangeConfigutarion;
-        const int INTERVAL = 1;
+        const int DEFAULT_INTERVAL = 1;
         readonly int _interval;
         XmlDocument _document;
         Monitor _monitor;
         string _path;
-        public FileSystemWatcher(Monitor monitor, XmlDocument document, string path, int intervalSeconds = INTERVAL)
+        public FileSystemWatcher(Monitor monitor, XmlDocument document, string path, int intervalSeconds = DEFAULT_INTERVAL)
         {
             _monitor = monitor;
             _document = document;

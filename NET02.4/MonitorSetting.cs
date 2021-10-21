@@ -7,6 +7,10 @@ namespace NET02._4
     class MonitorSetting
     {
         public List<SiteData> siteData;
+        public MonitorSetting()
+        {
+            siteData = new List<SiteData>();
+        }
         public void SetSettingByXml(XmlDocument document)
         {
             int interval = 0;
@@ -36,10 +40,6 @@ namespace NET02._4
             {
                 throw new Exception(excaption.Message);
             }
-        }
-        public MonitorSetting()
-        {
-            siteData = new List<SiteData>();
         }
     }
 }
