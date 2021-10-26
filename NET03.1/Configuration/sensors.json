@@ -1,0 +1,27 @@
+[
+  
+  {
+    "Interval": 5,
+    "MeasuredValue": 0,
+    "Type": "Temperature",
+    "Mode": "Calibration"
+  },
+  {
+    "Interval": 5,
+    "MeasuredValue": 0,
+    "Type": "Magnetic",
+    "Mode": "Calibration"
+  },
+  {
+    "Interval": 5,
+    "MeasuredValue": 0,
+    "Type": "Pressure",
+    "Mode": "Calibration"
+  },
+  {
+    "Interval": 10,
+    "MeasuredValue": 0,
+    "Type": "Temperature",
+    "Mode": "Work"
+  }
+]
