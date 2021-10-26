@@ -1,7 +1,5 @@
 ﻿using NET03._1.Observer;
 using NET03._1.States;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
