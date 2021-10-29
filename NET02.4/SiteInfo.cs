@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace NET02._4
 {
-    class SiteData
+    class SiteInfo
     {
         public int PingInterval { get; set; }
         public int ServerResponseTime { get; set; }
         public string SiteUrl { get; set; }
         public string AdminEmail { get; set; }
-        public SiteData(int pingInterval, int serverResponseTime, string siteUrl, string adminEmail)
+        public SiteInfo(int pingInterval, int serverResponseTime, string siteUrl, string adminEmail)
         {
             PingInterval = pingInterval;
             ServerResponseTime = serverResponseTime;
