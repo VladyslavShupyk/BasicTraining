@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<sites>
+	<site>
+		<interval>10</interval>
+		<maxResponseTime>450</maxResponseTime>
+		<url>www.google.com</url>
+		<adminEmail>staff97staff@gmail.com</adminEmail>
+	</site>
+	<site>
+		<interval>10</interval>
+		<maxResponseTime>600</maxResponseTime>
+		<url>www.youtube.com</url>
+		<adminEmail>staff97staff@gmail.com</adminEmail>
+	</site>
+	<site>
+		<interval>10</interval>
+		<maxResponseTime>450</maxResponseTime>
+		<url>www.metanit.com</url>
+		<adminEmail>staff97staff@gmail.com</adminEmail>
+	</site>
+</sites>
